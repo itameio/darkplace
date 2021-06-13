@@ -8,6 +8,17 @@
   <sprites name="sprites"/>
   <backgrounds name="background"/>
   <paths name="paths"/>
+  <scripts name="scripts">
+    <script>scripts\scr_general.gml</script>
+  </scripts>
+  <objects name="objects">
+    <object>objects\o</object>
+    <object>objects\ounit</object>
+    <object>objects\oplayer</object>
+  </objects>
+  <rooms name="rooms">
+    <room>rooms\rtest</room>
+  </rooms>
   <help>
     <rtf>help.rtf</rtf>
   </help>
