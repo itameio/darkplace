@@ -10,6 +10,7 @@
   <paths name="paths"/>
   <scripts name="scripts">
     <script>scripts\scr_general.gml</script>
+    <script>scripts\scr_actions.gml</script>
   </scripts>
   <objects name="objects">
     <object>objects\o</object>

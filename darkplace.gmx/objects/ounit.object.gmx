@@ -28,7 +28,14 @@
             <string>///create
 name = "unit";
 age = noone;
+
+//
 spd = 15;
+wspd = 5;
+
+//
+target = noone;
+master = noone;
 
 
 </string>
@@ -55,17 +62,8 @@ spd = 15;
             <kind>1</kind>
             <string>///step
 
-//controls
-forward = keyboard_check(vk_up) || keyboard_check(ord('W'));
-backward = keyboard_check(vk_down) || keyboard_check(ord('S'));
-left = keyboard_check(vk_left) || keyboard_check(ord('A'));
-right = keyboard_check(vk_right) || keyboard_check(ord('D'));
+act_movecontrol()
 
-if(forward){}
-else if (backward){}
-
-if(right){}
-if(left){}
 </string>
           </argument>
         </arguments>
@@ -98,7 +96,7 @@ draw_circle(x, y, 32, false);
 draw_set_color(sec_col);
 draw_arrow(x, y, x + lengthdir_x(32, direction), y + lengthdir_y(32, direction), 32);
 
-direction = point_direction(x, y, mouse_x, mouse_y);
+
 </string>
           </argument>
         </arguments>
