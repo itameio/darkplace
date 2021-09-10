@@ -32,8 +32,10 @@ debug = true;
 
 camera = instance_create(x, y, ocamera)
 
-//pathfinding
-grid = mp_grid_create(0, 0, room_width / 64, room_height / 64, 64, 64)
+
+
+
+
 
 </string>
           </argument>
@@ -62,6 +64,10 @@ if(debug){
     if(kbrd(vk_enter)){game_restart();}
     if(kbrd(vk_escape) || mbp(mb_middle)){game_end();}
 }
+
+if(kbrdp(vk_alt)){debug = !debug}
+
+
 </string>
           </argument>
         </arguments>
@@ -85,7 +91,16 @@ if(debug){
           <argument>
             <kind>1</kind>
             <string>///creation
-if(room_exists(room + 1)){room_goto_next()}
+if(room_exists(room + 1)){
+    room_goto_next()
+    }
+    
+cellwidth = 64;
+cellheight = 64;
+hcells = 1440 / 64;
+vcells = 900 / 64;
+draw_grid = true;
+grid = mp_grid_create(0, 0, hcells, vcells, cellwidth, cellheight)
 
 /*
 screen_w = display_get_width()
@@ -117,6 +132,74 @@ view_enabled = true;
 
 
 
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///draw
+depth = -room_width;
+
+var draw_grid = false;
+
+//show player above grid for debug
+if(debug and exists(player)){player.depth = depth - 1;}
+
+//draw grid
+if(debug and kbrd(vk_alt) and kbrd("G")){
+    mp_grid_draw(o.grid)
+}
+//var iteration = 0
+if(draw_grid){
+
+    var cell_number = 0
+    
+    for(i=0; i&lt;(vcells); i++){
+        for(ii=0; ii&lt;(hcells); ii++){
+            
+            cell = mp_grid_get_cell(grid, ii, i)
+            
+            var filled = false;
+            if(cell==0){filled=true;}
+            
+            
+            
+            if(point_in_rectangle(mouse_x, mouse_y, ii*cellwidth, i*cellheight, (ii*cellwidth)+cellwidth, (i*cellheight)+cellheight)){
+                filled = true;
+                draw_set_color(c_lime)
+            }
+           
+            draw_rectangle(ii*cellwidth, i*cellheight, (ii*cellwidth)+cellwidth, (i*cellheight)+cellheight, filled)
+            
+            draw_set_color(c_yellow)
+            draw_text(ii*cellwidth, i*cellheight, "cell-"+string(cell_number)+"#fill: "+string(cell)+"#x: "+string(ii)+"#y: "+string(i))
+            
+            
+            cell_number++
+            
+        }
+    }
+}
+//show_message("iteration: " + string(iteration)+"#hcells: "+string(hcells))
 
 
 </string>

@@ -10,6 +10,7 @@
     <sprite>sprites\sbbox</sprite>
     <sprite>sprites\sdoor</sprite>
     <sprite>sprites\sitem</sprite>
+    <sprite>sprites\sunit</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -22,6 +23,7 @@
   </fonts>
   <objects name="objects">
     <object>objects\o</object>
+    <object>objects\oent</object>
     <object>objects\ounit</object>
     <object>objects\oplayer</object>
     <object>objects\oblock</object>
@@ -31,6 +33,7 @@
     <object>objects\oenemy</object>
     <object>objects\orad</object>
     <object>objects\ocamera</object>
+    <object>objects\omark</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_ini</room>
