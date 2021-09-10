@@ -1,2 +1,2 @@
-# darkplace
-A video game inspired by Dark Wood. Created in Game Maker Studio 1.9999
+# Darkplace
+A video game inspired by Dark Wood. Created in Game Maker Studio 1.9
