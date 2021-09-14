@@ -39,22 +39,6 @@ ally2 = crt(irandom(room_width), irandom(room_height), oally)
 ally2.target = ally1;
 ally2.action_name = "follow";
 
-ally3 = crt(irandom(room_width), irandom(room_height), oally)
-ally3.target = ally2;
-ally3.action_name = "follow";
-
-ally4 = crt(irandom(room_width), irandom(room_height), oally)
-ally4.target = ally3;
-ally4.action_name = "follow";
-
-ally5 = crt(irandom(room_width), irandom(room_height), oally)
-ally5.target = ally4;
-ally5.action_name = "follow";
-
-ally6 = crt(irandom(room_width), irandom(room_height), oally)
-ally6.target = ally5;
-ally6.action_name = "follow";
-
 </string>
           </argument>
         </arguments>
@@ -91,8 +75,8 @@ act_move_control()
 
 player_move_mouse()
 
-x = mouse_x;
-y = mouse_y;
+//x = mouse_x;
+//y = mouse_y;
 </string>
           </argument>
         </arguments>

@@ -57,7 +57,7 @@ faction = faction_player;
             <string>///step
 
 if(action_name=="follow"){
-    if(exists(o)and exists(o.player)){
+    if(exists(o)and exists(target)){
         //target = o.player;
         action = act_follow_unit(target)
     }

@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>///creation
 master = noone
-rad = 1000
+rad = room_width
 draw = true;
 
 </string>

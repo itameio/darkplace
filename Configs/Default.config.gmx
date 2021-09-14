@@ -678,7 +678,10 @@
     <option_xbone_title_id></option_xbone_title_id>
   </Options>
   <ConfigConstants>
-    <constants number="61">
+    <constants number="73">
+      <constant name="mp">2</constant>
+      <constant name="sp">1</constant>
+      <constant name="hp">0</constant>
       <constant name="rank_recruit">0</constant>
       <constant name="rank_soldier">1</constant>
       <constant name="rank_officer">2</constant>
@@ -697,8 +700,8 @@
       <constant name="attack_ranged">1</constant>
       <constant name="damage_single">0</constant>
       <constant name="damage_aoe">1</constant>
-      <constant name="faction_player">0</constant>
-      <constant name="faction_red">1</constant>
+      <constant name="faction_player">c_aqua</constant>
+      <constant name="faction_red">c_red</constant>
       <constant name="leadership">0</constant>
       <constant name="dexterity">1</constant>
       <constant name="discipline">2</constant>
@@ -706,9 +709,6 @@
       <constant name="thirst">1</constant>
       <constant name="hunger">2</constant>
       <constant name="fatigue">3</constant>
-      <constant name="hp">4</constant>
-      <constant name="sp">5</constant>
-      <constant name="mp">6</constant>
       <constant name="head">0</constant>
       <constant name="r_eye">1</constant>
       <constant name="r_ear">2</constant>
@@ -740,6 +740,18 @@
       <constant name="l_leg">27</constant>
       <constant name="l_knee">28</constant>
       <constant name="l_foot">29</constant>
+      <constant name="sword">0</constant>
+      <constant name="dagger">1</constant>
+      <constant name="bow">2</constant>
+      <constant name="club">3</constant>
+      <constant name="cleaver">4</constant>
+      <constant name="handgun">5</constant>
+      <constant name="rifle">6</constant>
+      <constant name="fist">-4</constant>
+      <constant name="faction_blue">c_blue</constant>
+      <constant name="faction_yellow">c_yellow</constant>
+      <constant name="faction_green">c_green</constant>
+      <constant name="faction_neutral">c_yellow</constant>
     </constants>
   </ConfigConstants>
 </Config>

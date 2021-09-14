@@ -83,13 +83,15 @@ else {speed = 0;}
 //follow unit 
 
 target = argument0;
-targetx = target.x;
-targety = target.y;
-min_range = 100
-max_range = 100
-run = false;
 
 if(exists(target)){
+
+    targetx = target.x;
+    targety = target.y;
+    min_range = 100
+    max_range = 200
+    run = false;
+   
     
     //check if targetis insight
     if(collision_line(x, y, target.x, target.y, oblock, true, true) != noone){insight = false;} else {insight = true;};
@@ -137,8 +139,9 @@ if(exists(target)){
             
         }
     }
-    
-    
+        
+        
+        
     
 }
 
@@ -147,21 +150,98 @@ if(exists(target)){
 
 
 
+#define switch_actions
+//switch actions
+
+switch(action_name){
+
+    case "face":
+        {
+        action = act_face(target)
+        }
+        break;
+    case "follow":
+        {
+        action = act_follow_unit(target);
+        }
+        break;
+    case "recruit":
+        {
+        action = act_recruit(target);
+        }
+        break;
+    case "attack":
+        {
+        action = act_attack_unit(target);
+        }
+        break;
+    
+} 
+
 #define act_attack_unit
 target = argument0;
-act_follow_unit(target)
+//
+
+var space = unit_width*2;
+
+if (exists(target)){
+    
+    if (distance_to_object(target)>space){
+        act_moveto(target);
+    } else {
+        
+        /*if(target.faction == noone){
+            target.master = id;
+            target.faction = faction;
+            target.rank = rank_recruit;
+            target.main_col = main_col;
+            target.sec_col = sec_col;
+            
+            target = noone;
+            action_name = "";
+        } else {
+            target = noone;
+        }*/
+        //show_message(target.stat[hp])
+        if(attack_cooldown<=0){
+            target.stat[hp] -= base_damage;
+            attack_cooldown = 100;
+        } else {
+            attack_cooldown--;
+        }
+        
+        speed = 0;
+        if(exists(path)){
+            path_end();
+        }
+         
+    }
+}
+
 #define act_avoid
 //avoid solid objects
 #define act_face
 //face a unit or a point
+var target, xx, yy;
 
-var xx, yy;
+if(argument_count==1){
+    target = argument[0];
+    
+    if(exists(target)){
+        xx = target.x;
+        yy = target.y;
+    } 
+} 
 
-xx = argument0;
-yy = argument1;
+if(argument_count>1){
+    xx = argument[0];
+    yy = argument[1];
+}
 
 
 direction =  point_direction(x, y, xx, yy)
+
+
 
 
 
@@ -265,6 +345,11 @@ if (exists(target) and (distance_to_object(target)>space)){
         target.rank = rank_recruit;
         target.main_col = main_col;
         target.sec_col = sec_col;
+        target.class = choose("")
+        target.attack_type = choose(attack_melee, attack_ranged);
+        target.base_damage = random(5);
+        target = noone;
+        action_name = "";
     } else {
         target = noone;
     }
@@ -275,3 +360,67 @@ if (exists(target) and (distance_to_object(target)>space)){
     }
      
 }
+
+#define switch_weapon
+//
+switch(weapon_type){
+    case fist:
+    {
+    weapon_type = noone;
+    weapon_range = noone;
+    weapon_damage = noone;
+    }
+    break;
+    
+    case sword:
+    {
+    wp_set(attack_melee, 128, base_damage);
+    }
+    break;
+    
+    case dagger:
+    {
+    wp_set(attack_melee, 98, base_damage);
+    }
+    break;
+    
+    case club:
+    {
+    wp_set(attack_melee, 98, base_damage);
+    }
+    break;
+    
+    case cleaver:
+    {
+    wp_set(attack_melee, 98, base_damage);
+    }
+    break;
+    
+    case bow:
+    {
+    wp_set(attack_ranged, 500, base_damage);
+    }
+    break;
+    
+    case handgun:
+    {
+    wp_set(attack_ranged, 500, base_damage);
+    }
+    break;
+    
+    case rifle:
+    {
+    wp_set(attack_ranged, 700, base_damage);
+    }
+    break;
+}
+
+
+
+
+
+#define wp_set
+//
+weapon_type = argument[0];
+weapon_range = argument[1];
+weapon_damage = argument[2];

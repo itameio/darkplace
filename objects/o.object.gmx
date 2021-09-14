@@ -26,11 +26,25 @@
           <argument>
             <kind>1</kind>
             <string>///creation
+
+if(room_exists(room + 1)){
+    room_goto_next()
+}
+
+
+cellwidth = 64;
+cellheight = 64;
+hcells = 1440 / 64;
+vcells = 900 / 64;
+grid = mp_grid_create(0, 0, hcells, vcells, cellwidth, cellheight);
+
 player = noone;
 
 debug = true;
 
 camera = instance_create(x, y, ocamera)
+
+
 
 
 
@@ -91,9 +105,7 @@ if(kbrdp(vk_alt)){debug = !debug}
           <argument>
             <kind>1</kind>
             <string>///creation
-if(room_exists(room + 1)){
-    room_goto_next()
-    }
+
     
 cellwidth = 64;
 cellheight = 64;

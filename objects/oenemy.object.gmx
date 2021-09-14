@@ -28,11 +28,8 @@
             <string>///create
 event_inherited()
 
-main_col = c_red;
-sec_col = c_yellow;
-
 rank = rank_officer
-faction = faction_red;
+faction = choose(faction_red, faction_blue, faction_green);
 </string>
           </argument>
         </arguments>
