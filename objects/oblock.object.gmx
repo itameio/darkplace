@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///create
+name = object_get_name(id);
 solid = true;
 </string>
           </argument>

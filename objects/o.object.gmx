@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///creation
+name = object_get_name(id);
 
 if(room_exists(room + 1)){
     room_goto_next()
@@ -43,6 +44,7 @@ player = noone;
 debug = true;
 
 camera = instance_create(x, y, ocamera)
+
 
 
 
@@ -82,6 +84,32 @@ if(debug){
 if(kbrdp(vk_alt)){debug = !debug}
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///debug
+if(instance_number(oitem)&lt;5){
+    var xx = random(room_width)
+    var yy = random(room_height)
+    crt(xx, yy, oitem);
+}
 </string>
           </argument>
         </arguments>
@@ -174,13 +202,13 @@ depth = -room_width;
 var draw_grid = false;
 
 //show player above grid for debug
-if(debug and exists(player)){player.depth = depth - 1;}
+if(debug and exists(player) and player.depth&gt;=depth){player.depth = depth - 1;}
 
 //draw grid
 if(debug and kbrd(vk_alt) and kbrd("G")){
     mp_grid_draw(o.grid)
 }
-//var iteration = 0
+
 if(draw_grid){
 
     var cell_number = 0
@@ -211,8 +239,6 @@ if(draw_grid){
         }
     }
 }
-//show_message("iteration: " + string(iteration)+"#hcells: "+string(hcells))
-
 
 </string>
           </argument>

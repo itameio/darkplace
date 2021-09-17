@@ -11,12 +11,15 @@
     <sprite>sprites\sdoor</sprite>
     <sprite>sprites\sitem</sprite>
     <sprite>sprites\sunit</sprite>
+    <sprite>sprites\sunit2</sprite>
+    <sprite>sprites\svc</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
     <script>scripts\scr_general.gml</script>
     <script>scripts\scr_actions.gml</script>
+    <script>scripts\vision_cone.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fgen</font>
@@ -34,11 +37,15 @@
     <object>objects\orad</object>
     <object>objects\ocamera</object>
     <object>objects\omark</object>
+    <object>objects\oprojec</object>
+    <object>objects\obj</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_ini</room>
-    <room>rooms\rtest</room>
+    <room>rooms\rvision_test</room>
+    <room>rooms\room3</room>
     <room>rooms\rtest2</room>
+    <room>rooms\rtest</room>
   </rooms>
   <help>
     <rtf>help.rtf</rtf>

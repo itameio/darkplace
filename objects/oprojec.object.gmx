@@ -27,6 +27,64 @@
             <kind>1</kind>
             <string>///create
 name = object_get_name(id);
+master = noone;
+spd = noone;
+target = noone;
+rad = 5
+xx=noone;
+yy=noone;
+col=noone;
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///step
+if(exists(master)){
+
+    target = master.target;
+    spd = master.spd;
+    damage = master.weapon_damage;
+
+    if(exists(target) and target.object_index==ounit){
+        if(xx==noone){xx=target.x;}
+        if(yy==noone){yy=target.y;}
+        
+        direction = point_direction(x, y, xx, yy);
+        speed = spd;
+        
+        if(distance_to_point(xx, yy)&lt;spd){
+            
+            if(point_distance(target.x, target.y, xx, yy)&lt;spd){
+                target.stat[hp] -= master.weapon_damage;
+                target.is_attacked = true;
+                target.attacker = master.id;
+                //master.attack_cooldown = 100;
+            }
+            instance_destroy();
+        }
+    }
+
+}
 </string>
           </argument>
         </arguments>
@@ -50,8 +108,15 @@ name = object_get_name(id);
           <argument>
             <kind>1</kind>
             <string>///draw
-draw_set_color(c_lime)
-draw_circle(x, y, 10, true)
+
+if(exists(master) and col==noone){
+    col = master.theme_col;
+} else {
+    draw_set_color(c_red);
+}
+
+draw_set_color(col);
+draw_circle(x, y, rad, false);
 </string>
           </argument>
         </arguments>

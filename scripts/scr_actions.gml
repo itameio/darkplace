@@ -175,18 +175,27 @@ switch(action_name){
         action = act_attack_unit(target);
         }
         break;
+    case "pickup":
+        {
+        action = act_pickup(target);
+        }
+        break;
     
 } 
 
 #define act_attack_unit
 target = argument0;
 //
-
-var space = unit_width*2;
+if(attack_type==attack_ranged and !has_item("ammo")){
+        target = noone;
+        action = noone;
+} else
 
 if (exists(target)){
     
-    if (distance_to_object(target)>space){
+    
+    
+    if (distance_to_object(target) > weapon_range*3){
         act_moveto(target);
     } else {
         
@@ -204,8 +213,23 @@ if (exists(target)){
         }*/
         //show_message(target.stat[hp])
         if(attack_cooldown<=0){
+        
+            if(attack_type==attack_ranged){
+                if(has_item("ammo")){
+                    projec = crt(x, y, oprojec);
+                    projec.master = id;
+                    attack_cooldown = weapon_cooldown;
+                    inv[? "ammo"]--;
+                }
+                  
+            } else {
+            
             target.stat[hp] -= base_damage;
-            attack_cooldown = 100;
+            target.is_attacked = true;
+            target.attacker = id;
+            attack_cooldown = weapon_cooldown;
+            
+            }
         } else {
             attack_cooldown--;
         }
@@ -214,6 +238,8 @@ if (exists(target)){
         if(exists(path)){
             path_end();
         }
+        
+        act_face(target)
          
     }
 }
@@ -267,8 +293,8 @@ var mbr = mbp(mb_right)
 target = argument0;
 targetx = target.x;
 targety = target.y;
-min_range = 300
-max_range = 400
+min_range = unit_width
+max_range = unit_width
 run = false;
 
 if(exists(target)){
@@ -335,30 +361,37 @@ if(exists(target)){
 
 var space = unit_width*2;
 
-if (exists(target) and (distance_to_object(target)>space)){
-    act_moveto(target);
-} else {
-    
-    if(target.faction == noone){
-        target.master = id;
-        target.faction = faction;
-        target.rank = rank_recruit;
-        target.main_col = main_col;
-        target.sec_col = sec_col;
-        target.class = choose("")
-        target.attack_type = choose(attack_melee, attack_ranged);
-        target.base_damage = random(5);
-        target = noone;
-        action_name = "";
+if (exists(target)){
+
+    if (distance_to_object(target)>space){
+        act_moveto(target);
     } else {
-        target = noone;
+        
+        if(faction_capacity>0 and target.faction == noone){
+            target.master = id;
+            target.faction = faction;
+            target.rank = rank_recruit;
+            target.main_col = main_col;
+            target.sec_col = sec_col;
+            target.class = choose("")
+            target.attack_type = choose(attack_melee, attack_ranged);
+            target.base_damage = random(5);
+            
+            faction_members[array_length_1d(faction_members)] = target.id;
+            faction_capacity--;
+            //show_message(faction_capacity)
+            target = noone;
+            action_name = "";
+        } else {
+            target = noone;
+        }
+        
+        speed = 0;
+        if(exists(path)){
+            path_end();
+        }
+         
     }
-    
-    speed = 0;
-    if(exists(path)){
-        path_end();
-    }
-     
 }
 
 #define switch_weapon
@@ -419,8 +452,144 @@ switch(weapon_type){
 
 
 
+
+
 #define wp_set
 //
-weapon_type = argument[0];
+attack_type = argument[0];
 weapon_range = argument[1];
 weapon_damage = argument[2];
+
+#define detect_objects
+//detects objects and sorts them based on type
+/*for(i=0;i<array_length_1d(id.detected_objects);i++){
+        
+    if(exists(id.detected_objects[i])){
+        
+        //show_message("is unit: "+string(o.is_unit))
+        //show_message("unit: "+string(id.detected_objects[i].object_index))
+        
+        if(id.detected_objects[i].object_index==ounit){
+            id.detected_units[i] = id.detected_objects[i];
+        } else
+        
+        if(id.detected_objects[i].object_index==oitem){
+            id.detected_items[i] = id.detected_objects[i];
+        }
+    } else {
+        id.detected_objects[i]=noone;
+    }
+}
+
+#define vision
+//calculate and draw vision cone
+if(exists(radd)){
+    
+    var width = 20;
+    
+    x2 = lengthdir_x(radd.rad, direction - width)
+    y2 = lengthdir_y(radd.rad, direction - width)
+    
+    x1 = lengthdir_x(radd.rad, direction + width)
+    y1 = lengthdir_y(radd.rad, direction + width)
+    
+    var dir = direction;
+    
+    if(x3 == noone){x3 = x1;}
+    if(y3 == noone){y3 = y1;}
+    
+    if(diff < -width){
+    
+        turn = 1;
+        draw_set_color(c_aqua)
+    } 
+    
+    if(diff > width){
+    
+        turn = 0;
+        draw_set_color(c_white)
+    } 
+    
+    x3 = lengthdir_x(radd.rad, (dir) + diff)
+    y3 = lengthdir_y(radd.rad, (dir) + diff)
+    
+    if(turn == 0){
+        diff--;
+        detected_obj = collision_line(x, y, x + x3, y + y3, oent, true, true)
+        
+    } else 
+    
+    if(turn == 1){
+        diff++;
+        detected_obj = collision_line(x, y, x + x3, y + y3, oent, true, true)
+    }
+    
+    if(detected_obj != noone){
+    
+            exist = false
+            for(i=1;i<array_length_1d(detected_objects);i++){
+                if(detected_obj.id == detected_objects[i]){
+                    exist = true;
+                }
+            }
+            
+            if(!exist){detected_objects[array_length_1d(detected_objects)] = detected_obj;}
+            
+            //instance_destroy(detected_objects[i]);
+        }
+        
+    if(!id==o.player){
+        //with(detected_obj){instance_destroy();}
+    }
+
+    if(id.draw_cone){
+        draw_line(x, y, x + x1, y + y1)
+        draw_line(x, y, x + x2, y + y2)
+        
+        draw_set_alpha(0.3)
+        draw_triangle(x, y, x + x1, y + y1, x + x2, y + y2, false)
+        draw_set_alpha(1)
+        //draw_circle(x, y, radd.rad, true)
+        
+        if(collision_line(x, y, x3, y3, ounit, true, true)){
+            draw_set_color(c_lime)
+        }
+        
+        draw_arrow(x, y, x + x3, y + y3, 25)
+    }
+}
+
+#define has_item
+//
+if(ds_map_exists(inv, argument[0]) or (inv[? argument[0]]>0)){
+    return true;                    
+} else {
+    return false;
+}
+
+#define act_pickup
+//pick up an item
+var space = unit_width*2;
+
+if (exists(target) and (target.object_index==oitem)){
+
+    if (distance_to_object(target)>space){
+        act_moveto(target);
+    } else {
+        
+        if(!has_item(target.item_type)){inv[? target.item_type] = 0;}
+        inv[? target.item_type] += target.quantity;
+        instance_destroy(target);
+        speed = 0;
+        if(exists(path)){
+            path_end();
+        }
+         
+    }
+}
+
+#define scan_rad
+for(i=0;i<360;i++){
+    direction = i;
+    vision();
+}
