@@ -515,32 +515,16 @@ if(exists(radd)){
     
     if(turn == 0){
         diff--;
-        detected_obj = collision_line(x, y, x + x3, y + y3, oent, true, true)
+        detected_obj = collision_line(x + x3, y + y3, x, y, oent, true, true)
         
     } else 
     
     if(turn == 1){
         diff++;
-        detected_obj = collision_line(x, y, x + x3, y + y3, oent, true, true)
+        detected_obj = collision_line(x + x3, y + y3, x, y, oent, true, true)
     }
     
-    if(detected_obj != noone){
-    
-            exist = false
-            for(i=1;i<array_length_1d(detected_objects);i++){
-                if(detected_obj.id == detected_objects[i]){
-                    exist = true;
-                }
-            }
-            
-            if(!exist){detected_objects[array_length_1d(detected_objects)] = detected_obj;}
-            
-            //instance_destroy(detected_objects[i]);
-        }
-        
-    if(!id==o.player){
-        //with(detected_obj){instance_destroy();}
-    }
+    add_detected()
 
     if(id.draw_cone){
         draw_line(x, y, x + x1, y + y1)

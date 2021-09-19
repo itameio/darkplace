@@ -42,9 +42,10 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_ini</room>
+    <room>rooms\rtest_units2</room>
     <room>rooms\rvision_test</room>
-    <room>rooms\room3</room>
-    <room>rooms\rtest2</room>
+    <room>rooms\rtest_units</room>
+    <room>rooms\rtest_empty</room>
     <room>rooms\rtest</room>
   </rooms>
   <help>

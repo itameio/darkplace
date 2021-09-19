@@ -105,6 +105,7 @@ if(kbrdp(vk_alt)){debug = !debug}
           <argument>
             <kind>1</kind>
             <string>///debug
+/*
 if(instance_number(oitem)&lt;5){
     var xx = random(room_width)
     var yy = random(room_height)

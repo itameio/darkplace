@@ -31,7 +31,7 @@ theme_col = c_lime;
 
 o.player = id
 faction = faction_player;
-/*
+
 ally1 = crt(irandom(room_width), irandom(room_height), oally)
 ally1.target = o.player;
 ally1.action_name = "follow";
@@ -39,7 +39,7 @@ ally1.action_name = "follow";
 ally2 = crt(irandom(room_width), irandom(room_height), oally)
 ally2.target = ally1;
 ally2.action_name = "follow";
-*/
+
 </string>
           </argument>
         </arguments>
@@ -111,33 +111,6 @@ draw_array(detected_objects)
 
 //if(mbp(mb_left)){scan_rad();}
 
-//primitive test
-v_buff = vertex_create_buffer();
-vertex_format_begin();
-vertex_format_add_position();
-vertex_format_add_colour();
-vertex_format_add_textcoord();
-v_format = vertex_format_end();
-v_buff = vertex_create_buffer();
-vertex_begin(v_buff, v_format);
-
-vertex_position(v_buff, x, y);
-vertex_colour(v_buff, c_white, 1);
-vertex_texcoord(v_buff, 0, 0);
-
-vertex_position(v_buff, 110, 10);
-vertex_colour(v_buff, c_white, 1);
-vertex_texcoord(v_buff, 1, 0);
-
-vertex_position(v_buff, 110, 110);
-vertex_colour(v_buff, c_white, 1);
-vertex_texcoord(v_buff, 1, 1);
-
-vertex_end(v_buff);
-var tex = sprite_get_texture(sblock, 0);
-//shader_set(shd_primitive);
-vertex_submit(v_buff, pr_trianglelist, tex);
-//shader_reset();
 
 
 
@@ -148,6 +121,30 @@ vertex_submit(v_buff, pr_trianglelist, tex);
 
 
 
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="32">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_message(instance_number(oent))
 </string>
           </argument>
         </arguments>

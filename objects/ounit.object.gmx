@@ -26,9 +26,14 @@
           <argument>
             <kind>1</kind>
             <string>///create
+event_inherited()
 name = "unit";
 age = noone;
 
+//detection
+base_frequency = 12;
+frequency = base_frequency;
+dir = direction;
 //stats
 hp_body[head] = 100;
 hp_body[neck] = 100;
@@ -136,8 +141,13 @@ inv = ds_map_create()
 left_hand = noone;
 right_hand = noone;
 back = noone;
-
-
+/*
+v_buff = vertex_create_buffer();
+vertex_format_begin()
+vertex_format_add_position();
+vertex_format_add_colour();
+vertex_format_add_textcoord();
+v_format = vertex_format_end();
 </string>
           </argument>
         </arguments>
@@ -418,6 +428,62 @@ if(!has_item("ammo") and faction!=noone){
         </arguments>
       </action>
     </event>
+    <event eventtype="8" enumb="72">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>vision_cone_3()
+/*
+{
+    var ox,oy,dx,dy,object,prec,notme,sx,sy,inst,i;
+    ox = argument0;
+    oy = argument1;
+    dx = argument2;
+    dy = argument3;
+    object = argument4;
+    prec = argument5;
+    notme = argument6;
+    sx = dx - ox;
+    sy = dy - oy;
+    inst = collision_line(ox,oy,dx,dy,object,prec,notme);
+    if (inst != noone) {
+        while ((abs(sx) &gt;= 1) || (abs(sy) &gt;= 1)) {
+            sx /= 2;
+            sy /= 2;
+            i = collision_line(ox,oy,dx,dy,object,prec,notme);
+            if (i) {
+                dx -= sx;
+                dy -= sy;
+                inst = i;
+            }else{
+                dx += sx;
+                dy += sy;
+            }
+        }
+    }
+    return inst;
+}
+
+
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
@@ -550,6 +616,7 @@ var ammo_count = 0;
 if(has_item("ammo")){
     ammo_count = inv[? "ammo"];
 }
+
 draw_text(xx+width/2, yy+4, string(ammo_count));
 
 }
@@ -561,7 +628,7 @@ if(id!=o.player) and (!exists(target) or !has_item("ammo")){
 }
 
 //draw vision cone
-vision_cone()
+
 
 
 </string>
