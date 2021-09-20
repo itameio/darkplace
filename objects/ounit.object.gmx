@@ -141,6 +141,8 @@ inv = ds_map_create()
 left_hand = noone;
 right_hand = noone;
 back = noone;
+//draw
+draw_cone = false;
 /*
 v_buff = vertex_create_buffer();
 vertex_format_begin()
@@ -196,7 +198,7 @@ if(exists(master)){master.faction_capacity++;}
             <kind>1</kind>
             <string>///step
 //
-//vision_cone();
+vision_cone_3();
 detect_objects();
 switch_actions()
 switch_weapon();
@@ -232,114 +234,6 @@ if(stat[hp]&lt;0){
 if(exists(master)){master.faction_capacity++;}
     instance_destroy()
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///officer
-//OFFICER UNIT
-
-if(rank==rank_officer){
-
-    faction_type = group_team;
-//get detected units
-    for(i=0;i&lt;array_length_1d(detected_objects);i++){
-        
-        var unit = noone;
-        
-        if(exists(id.detected_objects[i]) and id.detected_objects[i].object_index==ounit){
-            unit = id.detected_objects[i];
-        };
-        
-//decide action based on unit's faction
-        if(exists(unit)){
-  
-            if(unit.faction==noone){
-                if(id.faction_capacity&gt;0){
-                    target = unit;
-                    action_name = "recruit";
-                }
-            } else
-                
-            if(unit.faction==faction){
-                //instance_destroy(unit)
-            } else
-                
-            if(unit.faction==faction_player){
-                 instance_destroy(unit)
-                 if(id.faction!=faction_player){
-                    target = unit;
-                    //action = act_attack_unit(target)
-                    action_name = "attack"
-                    orders[0, 0] = action_name;
-                    orders[0, 1] = target;
-                   
-                }
-            }
-
-/*  
-            if(unit.faction==faction_red){
-                if(faction!=faction_red){
-                    target = unit;
-                    action = act_attack_unit(target)
-                    action_name = "attack"
-                    orders[0, 0] = action_name;
-                    orders[0, 1] = target;
-                }
-            }
-                
-            if(unit.faction==faction_blue){
-                if(faction!=faction_blue){
-                    target = unit;
-                    action = act_attack_unit(target)
-                    action_name = "attack"
-                    orders[0, 0] = action_name;
-                    orders[0, 1] = target;
-                }
-            }
-                
-            if(unit.faction==faction_green){
-                if(faction!=faction_green){
-                    target = unit;
-                    action = act_attack_unit(target)
-                    action_name = "attack"
-                    orders[0, 0] = action_name;
-                    orders[0, 1] = target;
-                }
-            }
-                
-            if(unit.faction==faction_yellow){
-                if(faction!=faction_yellow){
-                    target = unit;
-                    action = act_attack_unit(target)
-                    action_name = "attack"
-                    orders[0, 0] = action_name;
-                    orders[0, 1] = target;
-                }
-            }*/
-                   
-        
-        }
-        
-    }
-}
-//
 </string>
           </argument>
         </arguments>
@@ -427,8 +321,6 @@ if(!has_item("ammo") and faction!=noone){
           </argument>
         </arguments>
       </action>
-    </event>
-    <event eventtype="8" enumb="72">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -445,40 +337,97 @@ if(!has_item("ammo") and faction!=noone){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>vision_cone_3()
-/*
-{
-    var ox,oy,dx,dy,object,prec,notme,sx,sy,inst,i;
-    ox = argument0;
-    oy = argument1;
-    dx = argument2;
-    dy = argument3;
-    object = argument4;
-    prec = argument5;
-    notme = argument6;
-    sx = dx - ox;
-    sy = dy - oy;
-    inst = collision_line(ox,oy,dx,dy,object,prec,notme);
-    if (inst != noone) {
-        while ((abs(sx) &gt;= 1) || (abs(sy) &gt;= 1)) {
-            sx /= 2;
-            sy /= 2;
-            i = collision_line(ox,oy,dx,dy,object,prec,notme);
-            if (i) {
-                dx -= sx;
-                dy -= sy;
-                inst = i;
-            }else{
-                dx += sx;
-                dy += sy;
-            }
+            <string>///officer
+//OFFICER UNIT
+
+if(rank==rank_officer){
+
+    faction_type = group_team;
+//get detected units
+    for(i=0;i&lt;array_length_1d(detected_objects);i++){
+        
+        var unit = noone;
+        
+        if(exists(id.detected_objects[i]) and id.detected_objects[i].object_index==ounit){
+            unit = id.detected_objects[i];
+        };
+        
+//decide action based on unit's faction
+        if(exists(unit)){
+            /*
+            if(unit.faction==noone){
+                if(id.faction_capacity&gt;0){
+                    target = unit;
+                    action = act_recruit();
+                }
+            } 
+                
+            if(unit.faction==faction){
+                //instance_destroy(unit)
+            } 
+            */
+            if(unit.faction==faction_player){show_message("player");}
+            switch(unit.faction){
+                
+                case noone:
+                    {
+                    target = unit;
+                    action = act_recruit()
+                    //action_name = "attack"
+                    //orders[0, 0] = action_name;
+                    //orders[0, 1] = target;
+                    }
+                    break;
+    
+    
+                case faction_player:
+                    {   
+                    target = unit;
+                    action = act_attack_unit();
+                    }
+                    break;
+                    
+                if(unit.faction==faction_blue){
+                    if(faction!=faction_blue){
+                        target = unit;
+                        action = act_attack_unit(target)
+                        action_name = "attack"
+                        orders[0, 0] = action_name;
+                        orders[0, 1] = target;
+                    }
+                }
+                break;
+                    
+                case faction_green:
+                {
+                    if(faction!=faction_green){
+                        target = unit;
+                        action = act_attack_unit(target)
+                        action_name = "attack"
+                        orders[0, 0] = action_name;
+                        orders[0, 1] = target;
+                    }
+                }
+                break;
+                    
+                case faction_yellow:
+                {
+                    if(faction!=faction_yellow){
+                        target = unit;
+                        action = act_attack_unit(target)
+                        action_name = "attack"
+                        orders[0, 0] = action_name;
+                        orders[0, 1] = target;
+                    }
+                }
+                break;
+            }    
+        
         }
+        
     }
-    return inst;
 }
-
-
-
+//
 </string>
           </argument>
         </arguments>
@@ -532,9 +481,13 @@ if(point_in_rectangle(mouse_x, mouse_y, x - unit_width/2, y - unit_height/2, x +
 
 if(draw_unit){
     draw_set_color(faction);
+    ///debug
+    if(faction==faction_player){
+        draw_set_color(c_lime);;
+    }
     draw_circle(x, y, 32, false);
     
-    draw_set_color(background_colour);
+    draw_set_color(background_color);
     draw_arrow(x, y, x + lengthdir_x(32, direction), y + lengthdir_y(32, direction), 32);
 }
 
@@ -628,7 +581,7 @@ if(id!=o.player) and (!exists(target) or !has_item("ammo")){
 }
 
 //draw vision cone
-
+draw_vision_cone()
 
 
 </string>

@@ -244,40 +244,27 @@ caculate and draw vision cone
 get all surrounding objects
 
 */
-
 if(exists(radd)){
-    
     width = 20; //this is the width of the vision cone *2
-    
     x2 = lengthdir_x(radd.rad, direction - width)
     y2 = lengthdir_y(radd.rad, direction - width)
-    
     x1 = lengthdir_x(radd.rad, direction + width)
-    y1 = lengthdir_y(radd.rad, direction + width)
-    
+    y1 = lengthdir_y(radd.rad, direction + width) 
+    var ray_num = 5; //should set this number based on how many units are in view 
     dir = direction;
-
     frequency--;
     if(frequency<=0){
         frequency = base_frequency;
-        var rad = 15;
-        
-        for(diff=-width;diff<=width;diff+=1){
+        //var rad = 15;
+        for(diff=-width;diff<=width;diff+=ray_num){
             //diff--;
             var active = true;
-            
             //for(ii=0;ii<radd.rad;ii+=16){
-                
                 if(active){
-                
                     x3 = lengthdir_x(radd.rad, (dir) + diff)
                     y3 = lengthdir_y(radd.rad, (dir) + diff)
-                    
                     detected_obj = check_line(x, y, x+x3, y+y3, oent)
-                    
-                    
                     if(exists(detected_obj)){
-                        
                         add_detected()
                         //stop = true;
                         if(detected_obj.object_index!=oitem){
@@ -285,19 +272,13 @@ if(exists(radd)){
                             //break;
                         }
                     }
-                    
-                    
-                    
-                    
                 }
                 //active = !active;
-                
             //}
         }
-    
-        draw_vision_cone()
+        
     }
-
+    draw_vision_cone()
 //}  
 }
 
@@ -308,7 +289,6 @@ if(exists(radd)){
 /// check_line(startx, starty, endx, endy, object)
 
 var startx, starty, endx, endy, object;
-
 startx = argument[0]
 starty = argument[1]
 endx = argument[2]
@@ -316,36 +296,25 @@ endy = argument[3]
 object = argument[4]
 distx = endx - startx;
 disty = endy - starty;
-
 ent = collision_line(startx, starty, endx, endy, object, true, true);
 draw_set_color(c_white)
 if(ent){
-    
     while(abs(distx)>=1 || abs(disty)>=1){
-    
         distx /= 2;
         disty /= 2;
-        
         i = collision_line(startx, starty, endx, endy, object, true, true);
-        
-        
-        
+        //draw_set_color(c_black)
+        //draw_line(endx+distx, endy+disty, endx+x3, endy+y3)
+        draw_set_color(c_red)
         if(i){
             endx -= distx;
             endy -= disty;
             ent = i;
-            draw_set_color(c_red)
         } else{
             endx += distx;
-            endy += disty;
-            
+            endy += disty;   
         }
-        
-        //draw_line(startx, starty, endx, endy)
-
     }
 }
-
-draw_line(startx, starty, endx, endy)
+//draw_line(startx, starty, endx, endy)
 return ent;
-

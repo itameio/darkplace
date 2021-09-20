@@ -80,9 +80,13 @@ else if(down){
 else {speed = 0;} 
 
 #define act_follow_unit
+///act_follow_unit(target)
 //follow unit 
-
-target = argument0;
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
 
 if(exists(target)){
 
@@ -184,34 +188,22 @@ switch(action_name){
 } 
 
 #define act_attack_unit
-target = argument0;
 //
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
+//show_message("")
 if(attack_type==attack_ranged and !has_item("ammo")){
         target = noone;
         action = noone;
-} else
+} else if (exists(target)){
 
-if (exists(target)){
-    
-    
-    
     if (distance_to_object(target) > weapon_range*3){
         act_moveto(target);
     } else {
-        
-        /*if(target.faction == noone){
-            target.master = id;
-            target.faction = faction;
-            target.rank = rank_recruit;
-            target.main_col = main_col;
-            target.sec_col = sec_col;
-            
-            target = noone;
-            action_name = "";
-        } else {
-            target = noone;
-        }*/
-        //show_message(target.stat[hp])
+
         if(attack_cooldown<=0){
         
             if(attack_type==attack_ranged){
@@ -358,6 +350,11 @@ if(exists(target)){
 
 #define act_recruit
 //
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
 
 var space = unit_width*2;
 

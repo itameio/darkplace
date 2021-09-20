@@ -28,7 +28,7 @@
             <string>///creation
 name = object_get_name(id);
 master = noone
-rad = room_width
+rad = 600
 draw = true;
 
 </string>
