@@ -78,7 +78,8 @@ if(id.draw_cone){
 }
 
 #define add_detected
-if(id==o.player and exists(detected_obj)){detected_obj.image_blend = c_red;;}
+///
+//if(id==o.player and exists(detected_obj)){detected_obj.image_blend = c_red;;}
 
 if(exists(detected_obj)){
     //check whether the object is already detected or not
@@ -96,41 +97,71 @@ if(exists(detected_obj)){
 
 #define vision_radius
 /*
-caculate and draw vision cone
-get all surrounding objects
 
 */
-frequency--;
-if(exists(radd) and (frequency<=0)){
-    
-    
 
-    
-//move the line around
+var xx, yy, xx2, yy2, p, pp;
+xx = 0;
+yy = 0;
+yy2 = 0
+xx2 = 0
+radius_frequency--;
+p = 16;
+pp = 32;
 
-        
-//detect following the line
-dir++
-for(ii=0;ii<radd.rad;ii+=16){
-
-    x3 = lengthdir_x(ii, dir)
-    y3 = lengthdir_y(ii, dir)
-    detected_obj = collision_point(x + x3, y + y3, oent, true, true)
-    
-    if(exists(detected_obj)){
-        add_detected()
-        //stop = true;
-        if(detected_obj.object_index!=oitem){
-            frequency = base_frequency;
-            break;
-        }
-    }
-    draw_line(x, y, x+x3, y+y3)
-
+if(o.player==id){
+    //draw_radius=true;
 }
 
+if(exists(radd) and (radius_frequency<=0)){
+    //radius_frequency = base_frequency;
+    //move the line around    
+    //detect following the line
+    rad_direction+=random(p); 
+    
+    for(ii=64;ii<radd.rad;ii+=pp){
+        //
+        xx = lengthdir_x(ii, rad_direction)
+        yy = lengthdir_y(ii, rad_direction)
+        if(draw_radius){
+            draw_set_color(theme_col)
+            draw_circle(x + xx, y+ yy, 5, false)
+        }
+        detected_obj = collision_point(x + xx, y + yy, oent, true, true)
+        //
+        xx2 = lengthdir_x(-ii, rad_direction)
+        yy2 = lengthdir_y(-ii, rad_direction)
+        if(draw_radius){
+            draw_set_color(theme_col)
+            draw_circle(x + xx2, y+ yy2, 5, false)
+        }
+        detected_obj = collision_point(x + xx2, y + yy2, oent, true, true)
+        
+        
+        if(exists(detected_obj)){
+            add_detected()
+            //instance_destroy(detected_obj)
+            
+            //stop = true;
+            //if(detected_obj.object_index!=oitem){
+                //radius_frequency = base_frequency;
+                //break;
+            //}
+        }
+        
+    
     }
-    //draw_vision_cone()
+
+}
+if(draw_radius){
+    draw_set_color(theme_col)
+    draw_line_width(x, y, x+xx, y+yy, 2)
+    draw_circle(x, y, radd.rad, true)
+    draw_line_width(x, y, x+xx2, y+yy2, 2)
+    
+}
+
+
     
 
 
@@ -250,11 +281,11 @@ if(exists(radd)){
     y2 = lengthdir_y(radd.rad, direction - width)
     x1 = lengthdir_x(radd.rad, direction + width)
     y1 = lengthdir_y(radd.rad, direction + width) 
-    var ray_num = 5; //should set this number based on how many units are in view 
+    var ray_num = 6; //should set this number based on how many units are in view 
     dir = direction;
     frequency--;
     if(frequency<=0){
-        frequency = base_frequency;
+        //frequency = base_frequency;
         //var rad = 15;
         for(diff=-width;diff<=width;diff+=ray_num){
             //diff--;
@@ -278,7 +309,7 @@ if(exists(radd)){
         }
         
     }
-    draw_vision_cone()
+    //draw_vision_cone()
 //}  
 }
 
@@ -287,7 +318,6 @@ if(exists(radd)){
 
 #define check_line
 /// check_line(startx, starty, endx, endy, object)
-
 var startx, starty, endx, endy, object;
 startx = argument[0]
 starty = argument[1]
@@ -303,6 +333,12 @@ if(ent){
         distx /= 2;
         disty /= 2;
         i = collision_line(startx, starty, endx, endy, object, true, true);
+        if(exists(i) and i.object_index==oitem){
+            instance_deactivate_object(i)
+            ii = collision_line(startx, starty, endx, endy, object, true, true);
+            instance_activate_object(i)
+            i=ii
+        }
         //draw_set_color(c_black)
         //draw_line(endx+distx, endy+disty, endx+x3, endy+y3)
         draw_set_color(c_red)
@@ -316,5 +352,66 @@ if(ent){
         }
     }
 }
-//draw_line(startx, starty, endx, endy)
+if(draw_cone){draw_line(startx, starty, endx, endy);}
 return ent;
+#define vision
+//calculate and draw vision cone
+if(exists(radd)){
+    
+    var width = 20;
+    
+    x2 = lengthdir_x(radd.rad, direction - width)
+    y2 = lengthdir_y(radd.rad, direction - width)
+    
+    x1 = lengthdir_x(radd.rad, direction + width)
+    y1 = lengthdir_y(radd.rad, direction + width)
+    
+    var dir = direction;
+    
+    if(x3 == noone){x3 = x1;}
+    if(y3 == noone){y3 = y1;}
+    
+    if(diff < -width){
+    
+        turn = 1;
+        draw_set_color(c_aqua)
+    } 
+    
+    if(diff > width){
+    
+        turn = 0;
+        draw_set_color(c_white)
+    } 
+    
+    x3 = lengthdir_x(radd.rad, (dir) + diff)
+    y3 = lengthdir_y(radd.rad, (dir) + diff)
+    
+    if(turn == 0){
+        diff--;
+        detected_obj = collision_line(x + x3, y + y3, x, y, oent, true, true)
+        
+    } else 
+    
+    if(turn == 1){
+        diff++;
+        detected_obj = collision_line(x + x3, y + y3, x, y, oent, true, true)
+    }
+    
+    add_detected()
+
+    if(id.draw_cone){
+        draw_line(x, y, x + x1, y + y1)
+        draw_line(x, y, x + x2, y + y2)
+        
+        draw_set_alpha(0.3)
+        draw_triangle(x, y, x + x1, y + y1, x + x2, y + y2, false)
+        draw_set_alpha(1)
+        //draw_circle(x, y, radd.rad, true)
+        
+        if(collision_line(x, y, x3, y3, ounit, true, true)){
+            draw_set_color(c_lime)
+        }
+        
+        draw_arrow(x, y, x + x3, y + y3, 25)
+    }
+}

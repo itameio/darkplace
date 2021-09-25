@@ -26,10 +26,13 @@
           <argument>
             <kind>1</kind>
             <string>///create
+//projectile object
 name = object_get_name(id);
 master = noone;
-spd = noone;
 target = noone;
+spd = noone;
+tx = noone;
+ty = noone;
 rad = 5
 xx=noone;
 yy=noone;
@@ -61,7 +64,7 @@ col=noone;
             <string>///step
 if(exists(master)){
 
-    target = master.target;
+    //target = master.target;
     spd = master.spd;
     damage = master.weapon_damage;
 
@@ -69,19 +72,27 @@ if(exists(master)){
         if(xx==noone){xx=target.x;}
         if(yy==noone){yy=target.y;}
         
-        direction = point_direction(x, y, xx, yy);
-        speed = spd;
         
-        if(distance_to_point(xx, yy)&lt;spd){
-            
-            if(point_distance(target.x, target.y, xx, yy)&lt;spd){
-                target.stat[hp] -= master.weapon_damage;
-                target.is_attacked = true;
-                target.attacker = master.id;
-                //master.attack_cooldown = 100;
-            }
-            instance_destroy();
-        }
+    } else {
+        if(xx==noone){xx=tx;}
+        if(yy==noone){yy=ty;}
+        
+        
+    }
+    
+    direction = point_direction(x, y, xx, yy);
+    speed = spd;
+        
+    if(distance_to_point(xx, yy)&lt;spd){
+        
+         if(exists(target)){
+            target.stat[hp] -= master.weapon_damage;
+            target.is_attacked = true;
+            target.attacker = master.id;
+         }
+        //master.attack_cooldown = 100;
+        
+        instance_destroy();
     }
 
 }

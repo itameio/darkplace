@@ -210,6 +210,9 @@ if(attack_type==attack_ranged and !has_item("ammo")){
                 if(has_item("ammo")){
                     projec = crt(x, y, oprojec);
                     projec.master = id;
+                    projec.target = id.target;
+                    projec.tx = target.x;
+                    projec.ty = target.y;
                     attack_cooldown = weapon_cooldown;
                     inv[? "ammo"]--;
                 }
@@ -399,48 +402,49 @@ switch(weapon_type){
     weapon_type = noone;
     weapon_range = noone;
     weapon_damage = noone;
+    weapon_cooldown = 50;
     }
     break;
     
     case sword:
     {
-    wp_set(attack_melee, 128, base_damage);
+    wp_set(attack_melee, 128, base_damage, 50);
     }
     break;
     
     case dagger:
     {
-    wp_set(attack_melee, 98, base_damage);
+    wp_set(attack_melee, 98, base_damage, 50);
     }
     break;
     
     case club:
     {
-    wp_set(attack_melee, 98, base_damage);
+    wp_set(attack_melee, 98, base_damage, 50);
     }
     break;
     
     case cleaver:
     {
-    wp_set(attack_melee, 98, base_damage);
+    wp_set(attack_melee, 98, base_damage, 50);
     }
     break;
     
     case bow:
     {
-    wp_set(attack_ranged, 500, base_damage);
+    wp_set(attack_ranged, 500, base_damage, 50);
     }
     break;
     
     case handgun:
     {
-    wp_set(attack_ranged, 500, base_damage);
+    wp_set(attack_ranged, 500, base_damage, 50);
     }
     break;
     
     case rifle:
     {
-    wp_set(attack_ranged, 700, base_damage);
+    wp_set(attack_ranged, 700, base_damage, 50);
     }
     break;
 }
@@ -456,6 +460,7 @@ switch(weapon_type){
 attack_type = argument[0];
 weapon_range = argument[1];
 weapon_damage = argument[2];
+weapon_cooldown = argument[3];
 
 #define detect_objects
 //detects objects and sorts them based on type
@@ -542,14 +547,21 @@ if(exists(radd)){
 
 #define has_item
 //
-if(ds_map_exists(inv, argument[0]) or (inv[? argument[0]]>0)){
+if(ds_map_exists(inv, argument[0]) and (inv[? argument[0]]>0)){
     return true;                    
 } else {
     return false;
 }
 
 #define act_pickup
+/// act_pickup(target)
 //pick up an item
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
+
 var space = unit_width*2;
 
 if (exists(target) and (target.object_index==oitem)){
@@ -574,3 +586,78 @@ for(i=0;i<360;i++){
     direction = i;
     vision();
 }
+#define act_idle
+///
+#define act_talk_to
+/// act_talk_to(target)
+//talk to an NPC
+
+//set traget
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
+//
+if(exists(target)){
+
+    targetx = target.x;
+    targety = target.y;
+    min_range = 100
+    max_range = 200
+    run = false;
+   
+    //check if targetis insight
+    if(collision_line(x, y, target.x, target.y, oblock, true, true) != noone){insight = false;} else {insight = true;};
+
+    //get distance to target
+    dst = distance_to_object(target)
+    
+    if(dst > min_range or !insight){
+        if(!run){run = true;}
+    
+    } else {
+        if(run){run = false;}
+    }
+    
+    if(!run){
+        if(speed>0){speed -= 1;}
+    }
+    
+    if(insight and run){ 
+        direction = point_direction(x, y, target.x, target.y)
+        if(speed<spd){speed += 1;}
+        move_towards_point(target.x, target.y, speed)//x += spd;
+    } else if(not insight and run){
+
+        if(!path_exists(path)){
+            path = path_add();
+        }
+            
+            mp_grid_path(grid, path, x, y, target.x, target.y, true)
+            mp_grid_add_instances(grid, oblock, true)
+            
+            if(speed<spd){speed = spd;} //this needs fixin
+            path_start(path, speed, run=false, false)
+            
+    }
+    
+    if(insight){
+        if(path_exists(path)){
+            path_end()
+            path_delete(path);
+            path = noone;
+            
+        }
+    }
+        
+        
+        
+    
+}
+
+
+
+
+
+

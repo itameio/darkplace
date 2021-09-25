@@ -17,9 +17,32 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
+    <scripts name="player">
+      <script>scripts\player_move_mouse.gml</script>
+      <script>scripts\player_move_control.gml</script>
+    </scripts>
     <script>scripts\scr_general.gml</script>
-    <script>scripts\scr_actions.gml</script>
-    <script>scripts\vision_cone.gml</script>
+    <scripts name="actions">
+      <script>scripts\switch_actions.gml</script>
+      <script>scripts\switch_weapons.gml</script>
+      <script>scripts\avoid.gml</script>
+      <script>scripts\act_move.gml</script>
+      <script>scripts\act_follow_unit.gml</script>
+      <script>scripts\act_attack_unit.gml</script>
+      <script>scripts\act_recruit.gml</script>
+      <script>scripts\act_talk_to.gml</script>
+      <script>scripts\act_idle.gml</script>
+      <script>scripts\act_moveto.gml</script>
+      <script>scripts\act_face.gml</script>
+      <script>scripts\act_pickup.gml</script>
+    </scripts>
+    <scripts name="detection">
+      <script>scripts\vision_cone.gml</script>
+      <script>scripts\scan_rad.gml</script>
+      <script>scripts\has_item.gml</script>
+      <script>scripts\detect_objects.gml</script>
+      <script>scripts\wp_set.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fgen</font>
@@ -39,12 +62,13 @@
     <object>objects\omark</object>
     <object>objects\oprojec</object>
     <object>objects\obj</object>
+    <object>objects\otalk</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_ini</room>
     <room>rooms\rtest_units</room>
-    <room>rooms\rvision_test</room>
     <room>rooms\rtest_units2</room>
+    <room>rooms\rvision_test</room>
     <room>rooms\rtest_empty</room>
     <room>rooms\rtest</room>
   </rooms>

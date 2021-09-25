@@ -29,11 +29,18 @@
 event_inherited()
 name = "unit";
 age = noone;
-
+unit_width = sprite_get_width(sblock)
+unit_height = sprite_get_height(sblock)
 //detection
 base_frequency = 12;
 frequency = base_frequency;
+radius_frequency = base_frequency;
+rad_direction = direction;
 dir = direction;
+//dialogue
+talk = false
+talk_with = noone;
+dlg = noone//crt(0, 0, otalk)
 //stats
 hp_body[head] = 100;
 hp_body[neck] = 100;
@@ -61,9 +68,7 @@ hp_body[r_knee] = 100;
 hp_body[l_knee] = 100;
 hp_body[r_foot] = 100;
 hp_body[l_foot] = 100;
-
-
-
+//
 stat[hp] = 100;
 stat[sp] = 100;
 stat[mp] = 100;
@@ -109,6 +114,7 @@ attack_cooldown = weapon_cooldown;
 is_attacked = false;
 in_combat = false;
 attacker = noone;
+base_cooldown = 50;
 //faction
 faction = noone;
 faction_type = group_team;
@@ -143,6 +149,7 @@ right_hand = noone;
 back = noone;
 //draw
 draw_cone = false;
+draw_radius = false;
 /*
 v_buff = vertex_create_buffer();
 vertex_format_begin()
@@ -196,153 +203,14 @@ if(exists(master)){master.faction_capacity++;}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///step
-//
-vision_cone_3();
-detect_objects();
-switch_actions()
-switch_weapon();
-
-//stop unit from exiting room borders
-x = clamp(x, 0, room_width)
-y = clamp(y, 0, room_height)
-
-if(exists(master)){
-//get orders from master
-    for(i=0;i&lt;array_height_2d(master.orders);i++){
-        for(ii=0;ii&lt;array_length_2d(master.orders, i);ii++){
-            orders[i, ii] = master.orders[i, ii];
-        }
-    }
-    
-    //switch(action_name){
-        //case "follow":
-            //target = orders[0, 1];
-            //action_name = orders[0, 0];
-            //action = act_follow_unit(target);
-        //case "attack":
-            //target = orders[0, 1];
-            //action_name = orders[0, 0];
-            //action = act_follow_unit(target);
-       
-        
-    ///}
-}
-
-//kill
-if(stat[hp]&lt;0){
-if(exists(master)){master.faction_capacity++;}
-    instance_destroy()
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///alert 
-//ACTION - alert nearby units if attacked
-if(is_attacked){
-
-    is_attacked = false;
-    
-    for(i=0;i&lt;array_length_1d(detected_objects);i++){
-        
-        var unit = noone;
-        //
-        if(exists(detected_objects[i])){
-            unit = detected_objects[i];
-        }
-        
-        if(exists(unit) and (unit.id!=o.player)){
-            switch(unit.faction){
-                case faction:
-                    {
-                    //unit.alert = true;
-                    //show_message("")
-                    unit.target = id.attacker;
-                    target = id.attacker;
-                    unit.action_name = "attack";
-                    }
-                    break;
-            }
-        }
-        
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///pickup ammo
-/*/ACTION - pick up ammo when ranged weapon is depleted
-if(!has_item("ammo") and faction!=noone){
-    for(i=0;i&lt;array_length_1d(detected_objects);i++){
-        var item = detected_objects[i];
-        if(exists(item) and (item.object_index==oitem)){
-            if(item.item_type=="ammo"){
-                target = item;
-                action_name = "pickup";   
-            }
-        }
-    }
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
             <string>///officer
 //OFFICER UNIT
 
 if(rank==rank_officer){
 
     faction_type = group_team;
+    
+    
 //get detected units
     for(i=0;i&lt;array_length_1d(detected_objects);i++){
         
@@ -354,25 +222,14 @@ if(rank==rank_officer){
         
 //decide action based on unit's faction
         if(exists(unit)){
-            /*
-            if(unit.faction==noone){
-                if(id.faction_capacity&gt;0){
-                    target = unit;
-                    action = act_recruit();
-                }
-            } 
-                
-            if(unit.faction==faction){
-                //instance_destroy(unit)
-            } 
-            */
-            if(unit.faction==faction_player){show_message("player");}
+
             switch(unit.faction){
                 
                 case noone:
                     {
                     target = unit;
                     action = act_recruit()
+                    faction_members[array_length_1d(faction_members)] = unit;
                     //action_name = "attack"
                     //orders[0, 0] = action_name;
                     //orders[0, 1] = target;
@@ -387,47 +244,124 @@ if(rank==rank_officer){
                     }
                     break;
                     
-                if(unit.faction==faction_blue){
-                    if(faction!=faction_blue){
-                        target = unit;
-                        action = act_attack_unit(target)
-                        action_name = "attack"
-                        orders[0, 0] = action_name;
-                        orders[0, 1] = target;
-                    }
-                }
-                break;
-                    
-                case faction_green:
-                {
-                    if(faction!=faction_green){
-                        target = unit;
-                        action = act_attack_unit(target)
-                        action_name = "attack"
-                        orders[0, 0] = action_name;
-                        orders[0, 1] = target;
-                    }
-                }
-                break;
-                    
-                case faction_yellow:
-                {
-                    if(faction!=faction_yellow){
-                        target = unit;
-                        action = act_attack_unit(target)
-                        action_name = "attack"
-                        orders[0, 0] = action_name;
-                        orders[0, 1] = target;
-                    }
-                }
-                break;
-            }    
+            }
         
         }
         
     }
+    //---------------------------------------------------------------------------------------------------
+    /*var o.temp_faction = faction;
+    var o.temp_unit = id;
+    for(i=0;i&lt;array_length_1d(faction_members);i++){
+        if(exists(faction_members[i]) and (faction_members[i]!=o.temp_unit) and (faction_members[i]!=o)){
+            with(faction_members[i]){
+                target = o.temp_unit;
+                action = act_follow_unit();
+            }
+        }
+    }*/
 }
 //
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///step
+//
+
+detect_objects();
+switch_actions()
+switch_weapons();
+
+//stop unit from exiting room borders
+x = clamp(x, 0, room_width)
+y = clamp(y, 0, room_height)
+
+
+if(exists(master)){
+//get orders from master
+    for(i=0;i&lt;array_height_2d(master.orders);i++){
+        for(ii=0;ii&lt;array_length_2d(master.orders, i);ii++){
+            orders[i, ii] = master.orders[i, ii];
+        }
+    }
+
+}
+
+///alert 
+//ACTION - alert nearby units if attacked
+/*
+if(is_attacked){
+
+    is_attacked = false;
+    
+    for(i=0;i&lt;array_length_1d(detected_objects);i++){
+        
+        var unit = noone;
+        //
+        if(exists(detected_objects[i])){
+            unit = detected_objects[i];
+        }
+        
+        if(exists(unit) and (unit.id!=o.player) and (unit.object_index==ounit)){
+            switch(unit.faction){
+                case faction:
+                    {
+                    //unit.alert = true;
+                    //show_message("")
+                    if(exists(id.attacker)){
+                        unit.target = id.attacker;
+                        target = id.attacker;
+                        unit.action = act_attack_unit();
+                    }
+                    
+                    }
+                    break;
+            }
+        }
+        
+    }
+}
+*/
+//kill
+if(stat[hp]&lt;0){
+if(exists(master)){master.faction_capacity++;}
+    instance_destroy()
+}
+
+
+//ACTION - pick up ammo when ranged weapon is depleted
+if(!has_item("ammo") and faction!=noone){
+    for(i=0;i&lt;array_length_1d(detected_objects);i++){
+        var item = detected_objects[i];
+        if(exists(item) and (item.object_index==oitem)){
+            if(item.item_type=="ammo"){
+                target = item;
+                action = act_pickup();   
+            }
+        }
+    }
+}
+
+//
+//target = noone;
+//action = noone;
 </string>
           </argument>
         </arguments>
@@ -451,7 +385,9 @@ if(rank==rank_officer){
           <argument>
             <kind>1</kind>
             <string>///draw
-draw_cone = false
+//draw vision cone
+vision_cone_3();
+vision_radius()
 draw_unit = true
 
 main_col = faction;
@@ -464,9 +400,9 @@ unit_height = sprite_get_height(sblock)
 //highlight unit
 if(point_in_rectangle(mouse_x, mouse_y, x - unit_width/2, y - unit_height/2, x + unit_width/2, y + unit_height/2)){
     draw_set_color(theme_col);
-    draw_cone = true
+    if(id!=o.player){draw_cone = true;}
     //draw_set_alpha(0.5)
-    draw_rectangle(x - unit_width/2, y - unit_height/2, x + unit_width/2, y + unit_height/2, false);
+    draw_rectangle(x - unit_width/2, y - unit_height/2, x + unit_width/2, y + unit_height/2, true);
     //draw_set_alpha(1)
     
     if(exists(radd)){
@@ -474,6 +410,7 @@ if(point_in_rectangle(mouse_x, mouse_y, x - unit_width/2, y - unit_height/2, x +
     }
     
 } else {
+    draw_cone = false;
     if(exists(radd)){
         radd.draw = false;
     }
@@ -499,7 +436,9 @@ draw_rectangle(x - unit_width/2, y - unit_height/2, x + unit_width/2, y + unit_h
 draw_set_alpha(1)
 
 if(exists(target)){
-
+    draw_set_alpha(0.5)
+    draw_line_width(x, y, target.x, target.y, 5)
+    draw_set_alpha(1)
     //draw path and path points
     draw_set_color(c_white)
     if(path_exists(path)){
@@ -534,14 +473,32 @@ if(exists(target)){
 //draw rank identifiers
 if(rank==rank_officer){
     var h = y - unit_width;
-    var str = "Officer";
-    draw_set_color(sec_col)
+    var str = "officer";
+    
     draw_line(x, y, x, h)
     draw_circle(x, h, 5, false)
+    draw_set_color(c_black)
+    draw_rectangle(x - unit_width/2, h - 40, x + unit_width/2, h, false)
     draw_set_halign(fa_center)
+    draw_set_color(theme_col)
     draw_text(x, h - 30, str)
     draw_text(x, h - 60, target)
 }
+
+if(exists(o.player) and id==o.player.id){
+    var h = y - unit_width;
+    var str = "player";
+    
+    draw_line(x, y, x, h)
+    draw_circle(x, h, 5, false)
+    draw_set_color(c_black)
+    draw_rectangle(x - unit_width/2, h - 40, x + unit_width/2, h, false)
+    draw_set_halign(fa_center)
+    draw_set_color(theme_col)
+    draw_text(x, h - 30, str)
+    draw_text(x, h - 60, target)
+}
+
 
 //draw health bar
 if(faction!=noone){
@@ -580,8 +537,8 @@ if(id!=o.player) and (!exists(target) or !has_item("ammo")){
     direction+=random(spd);
 }
 
-//draw vision cone
-draw_vision_cone()
+
+
 
 
 </string>
