@@ -32,6 +32,37 @@ name = object_get_name(id);
         </arguments>
       </action>
     </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///talk to npc
+var inst = collision_point(x, y, oent, true, true)
+
+if((inst) and (inst.object_index==ounit) and (exists(master)) and (inst.id.faction==noone)){
+    master.target = inst.id;
+    with(master){action = act_talk_to();}
+    instance_destroy()
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>

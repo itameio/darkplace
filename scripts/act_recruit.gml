@@ -1,4 +1,6 @@
 //
+action_name = "recruit";
+
 if(argument_count>0){
     target = argument[0];
 } else {

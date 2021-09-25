@@ -1,5 +1,14 @@
 //follow unit 
 
+action_name = "move to";
+
+//set target
+if(argument_count>0){
+    target = argument[0];
+} else {
+    target = target;
+}
+
 target = argument0;
 targetx = target.x;
 targety = target.y;

@@ -1,4 +1,6 @@
 ///act_follow_unit(target)
+action_name = "follow";
+
 //follow unit 
 if(argument_count>0){
     target = argument[0];

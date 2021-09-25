@@ -1,4 +1,6 @@
 //move 
+action_name = "move to point";
+
 target = argument0;
 targetx = target.x;
 targety = target.y;

@@ -150,6 +150,7 @@ back = noone;
 //draw
 draw_cone = false;
 draw_radius = false;
+
 /*
 v_buff = vertex_create_buffer();
 vertex_format_begin()
@@ -216,7 +217,7 @@ if(rank==rank_officer){
         
         var unit = noone;
         
-        if(exists(id.detected_objects[i]) and id.detected_objects[i].object_index==ounit){
+        if(exists(id.detected_objects[i]) and is_unit(id.detected_objects[i])){
             unit = id.detected_objects[i];
         };
         
@@ -285,8 +286,10 @@ if(rank==rank_officer){
             <string>///step
 //
 
-detect_objects();
-switch_actions()
+
+
+//detect_objects();
+//switch_actions() 
 switch_weapons();
 
 //stop unit from exiting room borders
@@ -294,6 +297,7 @@ x = clamp(x, 0, room_width)
 y = clamp(y, 0, room_height)
 
 
+/*
 if(exists(master)){
 //get orders from master
     for(i=0;i&lt;array_height_2d(master.orders);i++){
@@ -303,6 +307,7 @@ if(exists(master)){
     }
 
 }
+*/
 
 ///alert 
 //ACTION - alert nearby units if attacked
@@ -341,16 +346,16 @@ if(is_attacked){
 */
 //kill
 if(stat[hp]&lt;0){
-if(exists(master)){master.faction_capacity++;}
     instance_destroy()
 }
 
 
 //ACTION - pick up ammo when ranged weapon is depleted
+/*
 if(!has_item("ammo") and faction!=noone){
     for(i=0;i&lt;array_length_1d(detected_objects);i++){
         var item = detected_objects[i];
-        if(exists(item) and (item.object_index==oitem)){
+        if(exists(item) and (is_item(item))){
             if(item.item_type=="ammo"){
                 target = item;
                 action = act_pickup();   
@@ -358,9 +363,11 @@ if(!has_item("ammo") and faction!=noone){
         }
     }
 }
-
+*/
 //
-//target = noone;
+if(!target or !exists(target)){
+    action = act_idle();
+};
 //action = noone;
 </string>
           </argument>
@@ -386,8 +393,11 @@ if(!has_item("ammo") and faction!=noone){
             <kind>1</kind>
             <string>///draw
 //draw vision cone
-vision_cone_3();
+//if(is_player(id)){draw_cone=true;}
+//vision_cone_3();
+if(is_player(id)){draw_radius=true;}
 vision_radius()
+
 draw_unit = true
 
 main_col = faction;
@@ -471,9 +481,28 @@ if(exists(target)){
 }
 
 //draw rank identifiers
+
+//unit
+if(true){
+    var h = y - unit_width;
+    var str = name + " (" + string(id) + ")";
+    
+    draw_line(x, y, x, h)
+    draw_circle(x, h, 5, false)
+    draw_set_color(c_black)
+    draw_rectangle(x - unit_width, h - 40, x + unit_width, h, false)
+    draw_set_halign(fa_center)
+    draw_set_color(theme_col)
+    draw_text(x, h - 30, str)
+    action_target = action_name;
+    if(exists(target)){action_target = action_name + " : " + target.name + " (" + string(target.id) + ")";}
+    draw_text(x, h - 60, action_target)
+}
+
+//officer
 if(rank==rank_officer){
     var h = y - unit_width;
-    var str = "officer";
+    var str = "officer ("+id+")";
     
     draw_line(x, y, x, h)
     draw_circle(x, h, 5, false)
@@ -482,23 +511,8 @@ if(rank==rank_officer){
     draw_set_halign(fa_center)
     draw_set_color(theme_col)
     draw_text(x, h - 30, str)
-    draw_text(x, h - 60, target)
+    if(exists(target)){draw_text(x, h - 60, target.name)}
 }
-
-if(exists(o.player) and id==o.player.id){
-    var h = y - unit_width;
-    var str = "player";
-    
-    draw_line(x, y, x, h)
-    draw_circle(x, h, 5, false)
-    draw_set_color(c_black)
-    draw_rectangle(x - unit_width/2, h - 40, x + unit_width/2, h, false)
-    draw_set_halign(fa_center)
-    draw_set_color(theme_col)
-    draw_text(x, h - 30, str)
-    draw_text(x, h - 60, target)
-}
-
 
 //draw health bar
 if(faction!=noone){
@@ -532,8 +546,7 @@ draw_text(xx+width/2, yy+4, string(ammo_count));
 }
 
 //lookaround if no target or no ammo
-if(id!=o.player) and (!exists(target) or !has_item("ammo")){
-    
+if(!is_player(id)) and (!exists(target) or !has_item("ammo")){
     direction+=random(spd);
 }
 

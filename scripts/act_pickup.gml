@@ -1,4 +1,7 @@
 /// act_pickup(target)
+
+action_name = "pick up";
+
 //pick up an item
 if(argument_count>0){
     target = argument[0];

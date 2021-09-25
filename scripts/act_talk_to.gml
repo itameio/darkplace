@@ -1,72 +1,29 @@
+#define act_talk_to
 /// act_talk_to(target)
 //talk to an NPC
-
-//set traget
+action_name = "talk to";
+//set target
 if(argument_count>0){
     target = argument[0];
 } else {
     target = target;
 }
+
 //
-if(exists(target)){
+if (exists(target) and (is_unit(target))){
 
-    targetx = target.x;
-    targety = target.y;
-    min_range = 100
-    max_range = 200
-    run = false;
-   
-    //check if targetis insight
-    if(collision_line(x, y, target.x, target.y, oblock, true, true) != noone){insight = false;} else {insight = true;};
-
-    //get distance to target
-    dst = distance_to_object(target)
-    
-    if(dst > min_range or !insight){
-        if(!run){run = true;}
-    
+    if (distance_to_object(target) > unit_width){
+        act_moveto(target);
     } else {
-        if(run){run = false;}
+        id.talk_with = target;
+        target.talk_with = id;  
     }
-    
-    if(!run){
-        if(speed>0){speed -= 1;}
-    }
-    
-    if(insight and run){ 
-        direction = point_direction(x, y, target.x, target.y)
-        if(speed<spd){speed += 1;}
-        move_towards_point(target.x, target.y, speed)//x += spd;
-    } else if(not insight and run){
-
-        if(!path_exists(path)){
-            path = path_add();
-        }
-            
-            mp_grid_path(grid, path, x, y, target.x, target.y, true)
-            mp_grid_add_instances(grid, oblock, true)
-            
-            if(speed<spd){speed = spd;} //this needs fixin
-            path_start(path, speed, run=false, false)
-            
-    }
-    
-    if(insight){
-        if(path_exists(path)){
-            path_end()
-            path_delete(path);
-            path = noone;
-            
-        }
-    }
-        
-        
-        
-    
 }
 
-
-
-
-
-
+#define act_talk_with
+if(talk and talk_with and exists(talk_width)){
+    act_face(talk_with);
+    if(!dlg){
+        dlg = crt(x, y, otalk);
+    }
+}

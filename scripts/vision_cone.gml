@@ -36,7 +36,7 @@ if(exists(radd)){
                     if(exists(detected_obj)){
                         add_detected()
                         //stop = true;
-                        if(detected_obj.object_index!=oitem){
+                        if(!is_item(detected_obj)){
                             break;
                         }
                     }
@@ -90,7 +90,7 @@ if(exists(detected_obj)){
         }
     }
     //if the object is not already detected, add it to detected_objects
-    if(!exist){detected_objects[array_length_1d(detected_objects)] = detected_obj;}
+    if(!exist){id.detected_objects[array_length_1d(id.detected_objects)] = id.detected_obj;}
     
     //instance_destroy(detected_objects[i]);
 }
@@ -123,36 +123,38 @@ if(exists(radd) and (radius_frequency<=0)){
         //
         xx = lengthdir_x(ii, rad_direction)
         yy = lengthdir_y(ii, rad_direction)
+        //check point for entities
+        detected_obj = collision_point(x + xx, y + yy, oent, true, true)
+        if(exists(detected_obj)){add_detected();}
+        
+        //draw collision point
         if(draw_radius){
             draw_set_color(theme_col)
+            if(detected_obj){draw_set_color(c_red)}
             draw_circle(x + xx, y+ yy, 5, false)
         }
-        detected_obj = collision_point(x + xx, y + yy, oent, true, true)
         //
         xx2 = lengthdir_x(-ii, rad_direction)
         yy2 = lengthdir_y(-ii, rad_direction)
+        //check point for entities
+        detected_obj = collision_point(x + xx2, y + yy2, oent, true, true)
+        if(exists(detected_obj)){add_detected();}
+        
+        //draw collision point
         if(draw_radius){
             draw_set_color(theme_col)
+            if(detected_obj){draw_set_color(c_red)}
             draw_circle(x + xx2, y+ yy2, 5, false)
         }
-        detected_obj = collision_point(x + xx2, y + yy2, oent, true, true)
         
         
-        if(exists(detected_obj)){
-            add_detected()
-            //instance_destroy(detected_obj)
-            
-            //stop = true;
-            //if(detected_obj.object_index!=oitem){
-                //radius_frequency = base_frequency;
-                //break;
-            //}
-        }
+
         
     
     }
 
 }
+//draw radius circle
 if(draw_radius){
     draw_set_color(theme_col)
     draw_line_width(x, y, x+xx, y+yy, 2)
@@ -298,7 +300,7 @@ if(exists(radd)){
                     if(exists(detected_obj)){
                         add_detected()
                         //stop = true;
-                        if(detected_obj.object_index!=oitem){
+                        if(!is_item(detected_obj)){
                             //ii=radd.rad;
                             //break;
                         }
@@ -334,9 +336,9 @@ if(ent){
         disty /= 2;
         i = collision_line(startx, starty, endx, endy, object, true, true);
         if(exists(i) and i.object_index==oitem){
-            instance_deactivate_object(i)
-            ii = collision_line(startx, starty, endx, endy, object, true, true);
-            instance_activate_object(i)
+            //instance_deactivate_object(i)
+            //ii = collision_line(startx, starty, endx, endy, object, true, true);
+            //instance_activate_object(i)
             i=ii
         }
         //draw_set_color(c_black)
@@ -354,6 +356,7 @@ if(ent){
 }
 if(draw_cone){draw_line(startx, starty, endx, endy);}
 return ent;
+
 #define vision
 //calculate and draw vision cone
 if(exists(radd)){
