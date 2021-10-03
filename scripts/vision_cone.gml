@@ -125,7 +125,7 @@ if(exists(radd) and (radius_frequency<=0)){
         yy = lengthdir_y(ii, rad_direction)
         //check point for entities
         detected_obj = collision_point(x + xx, y + yy, oent, true, true)
-        if(exists(detected_obj)){add_detected();}
+        if(exists(detected_obj)){add_detected()}
         
         //draw collision point
         if(draw_radius){
@@ -143,7 +143,7 @@ if(exists(radd) and (radius_frequency<=0)){
         //draw collision point
         if(draw_radius){
             draw_set_color(theme_col)
-            if(detected_obj){draw_set_color(c_red)}
+            if(detected_obj){draw_set_color(c_red); }
             draw_circle(x + xx2, y+ yy2, 5, false)
         }
         
@@ -283,7 +283,7 @@ if(exists(radd)){
     y2 = lengthdir_y(radd.rad, direction - width)
     x1 = lengthdir_x(radd.rad, direction + width)
     y1 = lengthdir_y(radd.rad, direction + width) 
-    var ray_num = 6; //should set this number based on how many units are in view 
+    var ray_num = 6; //should set this number based on how many units are in radius/view 
     dir = direction;
     frequency--;
     if(frequency<=0){
@@ -296,7 +296,8 @@ if(exists(radd)){
                 if(active){
                     x3 = lengthdir_x(radd.rad, (dir) + diff)
                     y3 = lengthdir_y(radd.rad, (dir) + diff)
-                    detected_obj = check_line(x, y, x+x3, y+y3, oent)
+                    detected_obj = collision_line_first(x, y, x + x3, y + y3, oent, true, true)
+                    //detected_obj = check_line(x, y, x+x3, y+y3, oent)
                     if(exists(detected_obj)){
                         add_detected()
                         //stop = true;

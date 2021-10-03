@@ -17,11 +17,11 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
+    <script>scripts\scr_general.gml</script>
     <scripts name="player">
       <script>scripts\player_move_mouse.gml</script>
       <script>scripts\player_move_control.gml</script>
     </scripts>
-    <script>scripts\scr_general.gml</script>
     <scripts name="actions">
       <script>scripts\switch_actions.gml</script>
       <script>scripts\switch_weapons.gml</script>

@@ -182,6 +182,7 @@ v_format = vertex_format_end();
             <kind>1</kind>
             <string>///destroy
 if(exists(master)){master.faction_capacity++;}
+if(exists(radd)){instance_destroy(radd);}
 </string>
           </argument>
         </arguments>
@@ -206,7 +207,7 @@ if(exists(master)){master.faction_capacity++;}
             <kind>1</kind>
             <string>///officer
 //OFFICER UNIT
-
+/*
 if(rank==rank_officer){
 
     faction_type = group_team;
@@ -261,7 +262,7 @@ if(rank==rank_officer){
             }
         }
     }*/
-}
+//}
 //
 </string>
           </argument>
@@ -373,6 +374,28 @@ if(!target or !exists(target)){
           </argument>
         </arguments>
       </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///debug
+if(lclicked(id, true) and (!is_player(id))){instance_destroy()}
+</string>
+          </argument>
+        </arguments>
+      </action>
     </event>
     <event eventtype="8" enumb="0">
       <action>
@@ -393,9 +416,11 @@ if(!target or !exists(target)){
             <kind>1</kind>
             <string>///draw
 //draw vision cone
+
 //if(is_player(id)){draw_cone=true;}
-//vision_cone_3();
-if(is_player(id)){draw_radius=true;}
+vision_cone_3();
+
+//if(is_player(id)){draw_radius=true;}
 vision_radius()
 
 draw_unit = true
@@ -408,7 +433,7 @@ unit_width = sprite_get_width(sblock)
 unit_height = sprite_get_height(sblock)
 
 //highlight unit
-if(point_in_rectangle(mouse_x, mouse_y, x - unit_width/2, y - unit_height/2, x + unit_width/2, y + unit_height/2)){
+if(hover(id, true)){
     draw_set_color(theme_col);
     if(id!=o.player){draw_cone = true;}
     //draw_set_alpha(0.5)

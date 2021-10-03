@@ -70,7 +70,7 @@ event_inherited()
 
 var char_width = 64;
 
-if(!exists(mark) and point_distance(x, y, mouse_x, mouse_y) &gt; char_width){
+if((!exists(target) or (exists(target) and !insight))and !exists(mark) and point_distance(x, y, mouse_x, mouse_y) &gt; char_width){
     direction = point_direction(x, y, mouse_x, mouse_y);
 }
 

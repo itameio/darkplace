@@ -2,4 +2,4 @@
 array = argument0;
 value = argument1;
 
-id.array[array_length_1d(id.array)] = value;
+argument0[array_length_1d(argument0)] = value;

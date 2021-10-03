@@ -3,16 +3,16 @@
 
 #define is_unit
 /// is_unit(object)
-
+var ent;
 //set target
 if(argument_count>0){
-    target = argument[0];
+    ent = argument[0];
 } else {
-    target = target;
+    ent = target;
 }
 
 //check if object is unit or not
-if(target.object_index==ounit){
+if(ent.object_index==ounit){
     return true;
 } else {
     return false;
@@ -20,16 +20,16 @@ if(target.object_index==ounit){
 
 #define is_item
 /// is_item(object)
-
+var ent;
 //set target
 if(argument_count>0){
-    target = argument[0];
+    ent = argument[0];
 } else {
-    target = target;
+    ent = target;
 }
 
 //check if object is item or not
-if(target.object_index==oitem){
+if(ent.object_index==oitem){
     return true;
 } else {
     return false;
@@ -37,16 +37,16 @@ if(target.object_index==oitem){
 
 #define is_ent
 /// is_ent(object)
-
+var ent
 //set target
 if(argument_count>0){
-    target = argument[0];
+    ent = argument[0];
 } else {
-    target = target;
+    ent = target;
 }
 
 //check if object is an entity or not
-if(target.object_index==oent){
+if(ent.object_index==oent){
     return true;
 } else {
     return false;
@@ -54,16 +54,16 @@ if(target.object_index==oent){
 
 #define is_block
 /// is_block(object)
-
+var ent
 //set target
 if(argument_count>0){
-    target = argument[0];
+    ent = argument[0];
 } else {
-    target = target;
+    ent = target;
 }
 
 //check if object is a block or not
-if(target.object_index==oblock){
+if(ent.object_index==oblock){
     return true;
 } else {
     return false;
